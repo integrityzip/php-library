@@ -1,0 +1,17 @@
+{
+    "name": "itlabvi/php-library",
+    "type": "project",
+    "authors": [
+        {
+            "name": "integrityzip",
+            "email": "integrityhelper@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "classmap": [
+            "./",
+            "./Classes/"
+        ]
+    }
+}
