@@ -1,4 +1,7 @@
-<?php require_once __DIR__ . '/vendor/autoload.php'; ?>
+<?php 
+require_once __DIR__ . '/Logic.php';
+require_once __DIR__ . '/vendor/autoload.php'; 
+?>
 
 <?php
 include("Classes/DBManager.php");
@@ -18,29 +21,13 @@ $libraryManager = new LibraryManager($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>PHP Library</title>
 </head>
 
 <body>
     <div id="contentBox">
         <?php
-        $bookManager->GetAllBooks();
-
-        echo "<h3>hi this is placeholder text :]</h3>";
-
-        $cityManager->GetAllCities();
-
-        echo "<h3>hi this is placeholder text :]</h3>";
-
-        $publisherManager->GetAllPublishers();
-
-        echo "<h3>hi this is placeholder text :]</h3>";
-
-        $authorManager->GetAllAuthors();
-
-        echo "<h3>hi this is placeholder text :]</h3>";
-
-        $libraryManager->GetAllLibraries();
+            $authorManager->InsertAuthor();
         ?>
     </div>
 </body>
