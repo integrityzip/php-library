@@ -1,8 +1,57 @@
-* {
-    margin: 0;
-    padding: 0;
+#contentBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 15px;
 }
 
-#contentBox {
-    margin-left: 25px;
+#contentBox button {
+  width: 150px;
+  height: 32px;
+  font-size: 18px;
+  background-color: #fcc5f2;
+}
+
+#contentBox span {
+    font-size: 40px;
+}
+
+#mainContent {
+  margin-top: 25px;
+  margin-left: 25px;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: fit-content;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+form {
+    font-size: 25px;
+}
+
+form input,
+form select {
+    font-size: 18px;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.removeButton {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    font-size: 17px;
 }

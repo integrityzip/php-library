@@ -1,19 +1,23 @@
 <?php
 
+// Handles all author-related database operations
 class AuthorManager
 {
-    private $conn;
+    private static $conn;
 
-    public function __construct($conn)
+    // Initialize database connection
+    public static function SetConnection($conn)
     {
-        $this->conn = $conn;
+        if (self::$conn === null) {
+            self::$conn = $conn;
+        }
     }
 
-    public function GetAllAuthors()
+    public static function GetAllAuthors()
     {
         $query = "SELECT a.id, a.name, a.birthday FROM author a";
 
-        $result = $this->conn->query($query)->fetchAll();
+        $result = self::$conn->query($query)->fetchAll();
 
         echo "<br><br>";
 
@@ -26,28 +30,40 @@ class AuthorManager
         }
     }
 
-    public function InsertAuthor()
+    public static function InsertAuthor()
     {
-        include_once(__DIR__ . '/../Views/InsertAuthorForm.html');
+        try {
+            self::$conn->beginTransaction();
 
-        if (isset($_SESSION['authorName']) && isset($_SESSION['date'])) {
+            $stmt1 = self::$conn->prepare("INSERT INTO author (name, birthday) VALUES (:name, :birthday)");
+            $stmt1->execute(['name' => $_SESSION['authorName'], 'birthday' => $_SESSION['date']]);
 
-            try {
-                $this->conn->beginTransaction();
-
-                $stmt1 = $this->conn->prepare("INSERT INTO author (name, birthday) VALUES (:name, :birthday)");
-                $stmt1->execute(['name' => $_SESSION['authorName'], 'birthday' => $_SESSION['date']]);
-
-                $this->conn->commit();
-                echo "Author inserted successfully.";
-            } catch (Exception $e) {
-                $this->conn->rollBack();
-                echo "Failed to complete transaction: " . $e->getMessage();
-            }
-
-            unset($_POST['authorName']);
-            unset($_POST['date']);
+            self::$conn->commit();
+            echo "Author inserted successfully.";
+        } catch (Exception $e) {
+            self::$conn->rollBack();
+            echo "Failed to complete transaction: " . $e->getMessage();
         }
+
+        ResetHeader();
+    }
+
+    public static function DeleteAuthor()
+    {
+        try {
+            self::$conn->beginTransaction();
+
+            $stmt1 = self::$conn->prepare("DELETE FROM author WHERE id = :author_id");
+            $stmt1->execute(['author_id' => $_SESSION['authorId']]);
+
+            self::$conn->commit();
+            echo "Author deleted successfully.";
+        } catch (Exception $e) {
+            self::$conn->rollBack();
+            echo "Failed to complete transaction: " . $e->getMessage();
+        }
+
+        ResetHeader();
     }
 }
 

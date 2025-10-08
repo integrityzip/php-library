@@ -1,20 +1,23 @@
 <?php
 
+// Handles all city-related database operations
 class CityManager
 {
+    private static $conn;
 
-    private $conn;
-
-    public function __construct($conn)
+    // Initialize database connection
+    public static function SetConnection($conn)
     {
-        $this->conn = $conn;
+        if (self::$conn === null) {
+            self::$conn = $conn;
+        }
     }
 
-    public function GetAllCities()
+    public static function GetAllCities()
     {
         $query = "SELECT c.id, c.name FROM city c";
 
-        $result = $this->conn->query($query)->fetchAll();
+        $result = self::$conn->query($query)->fetchAll();
 
         echo "<br><br>";
 
@@ -24,6 +27,42 @@ class CityManager
 
             echo "<br><br><br>";
         }
+    }
+
+    public static function InsertCity()
+    {
+        try {
+            self::$conn->beginTransaction();
+
+            $stmt1 = self::$conn->prepare("INSERT INTO city (name) VALUES (:name)");
+            $stmt1->execute(['name' => $_SESSION['cityName']]);
+
+            self::$conn->commit();
+            echo "City inserted successfully.";
+        } catch (Exception $e) {
+            self::$conn->rollBack();
+            echo "Failed to complete transaction: " . $e->getMessage();
+        }
+
+        ResetHeader();
+    }
+
+    public static function DeleteCity()
+    {
+        try {
+            self::$conn->beginTransaction();
+
+            $stmt1 = self::$conn->prepare("DELETE FROM city WHERE id = :city_id");
+            $stmt1->execute(['city_id' => $_SESSION['cityId']]);
+
+            self::$conn->commit();
+            echo "City deleted successfully.";
+        } catch (Exception $e) {
+            self::$conn->rollBack();
+            echo "Failed to complete transaction: " . $e->getMessage();
+        }
+
+        ResetHeader();
     }
 }
 
